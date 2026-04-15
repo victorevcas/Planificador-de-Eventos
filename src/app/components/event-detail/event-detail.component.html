@@ -1,0 +1,83 @@
+<div class="pagina-detalle" *ngIf="evento">
+  <div class="tarjeta-detalle" [ngClass]="'borde-' + evento.color">
+
+    <!-- Franja de color superior -->
+    <div class="franja" [ngClass]="'fondo-' + evento.color"></div>
+
+    <div class="cuerpo">
+
+      <!-- Volver -->
+      <a routerLink="/calendario" class="btn-volver">← Volver al calendario</a>
+
+      <!-- Título con pipe uppercase -->
+      <h1 class="titulo">{{ evento.titulo | uppercase }}</h1>
+
+      <!-- Fecha con pipe titlecase -->
+      <div class="fila-info">
+        <span class="icono">📅</span>
+        <span>{{ fechaFormateada | titlecase }}</span>
+      </div>
+
+      <!-- Hora + pipe duracionEvento personalizado -->
+      <div class="fila-info">
+        <span class="icono">🕐</span>
+        <span>
+          {{ evento.horaInicio }}
+          <ng-container *ngIf="evento.horaFin"> — {{ evento.horaFin }}</ng-container>
+          <!-- Pipe personalizado encadenado -->
+          <span class="duracion" *ngIf="evento.horaFin">
+            ({{ evento.horaInicio | duracionEvento: evento.horaFin }})
+          </span>
+        </span>
+      </div>
+
+      <!-- Descripción — *ngIf condicional -->
+      <div class="fila-info" *ngIf="evento.descripcion">
+        <span class="icono">📝</span>
+        <span>{{ evento.descripcion }}</span>
+      </div>
+
+      <!-- Color -->
+      <div class="fila-info">
+        <span class="icono">🎨</span>
+        <span class="badge-color" [ngClass]="'badge-' + evento.color">
+          {{ etiquetasColor[evento.color] }}
+        </span>
+      </div>
+
+      <!-- Creador — *ngIf -->
+      <div class="fila-info" *ngIf="creador">
+        <span class="icono">👤</span>
+        <span>{{ creador.avatar }} {{ creador.nombre | titlecase }}</span>
+      </div>
+
+      <!-- Participantes — *ngFor + *ngIf -->
+      <div class="seccion-participantes" *ngIf="participantes.length > 0">
+        <p class="subtitulo-sec">Participantes ({{ participantes.length }})</p>
+        <div class="lista-participantes">
+          <span
+            class="chip-participante"
+            *ngFor="let p of participantes; trackBy: trackByPerfil"
+          >
+            {{ p.avatar }} {{ p.nombre | titlecase }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Sin participantes — *ngIf -->
+      <div class="fila-info sin-participantes" *ngIf="participantes.length === 0">
+        <span class="icono">👥</span>
+        <span>Sin participantes invitados</span>
+      </div>
+
+      <!-- Acciones -->
+      <div class="acciones">
+        <button class="btn-eliminar" (click)="alEliminar()">🗑️ Eliminar</button>
+        <a class="btn-editar" [routerLink]="['/eventos', evento.id, 'editar']">
+          ✏️ Editar
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>

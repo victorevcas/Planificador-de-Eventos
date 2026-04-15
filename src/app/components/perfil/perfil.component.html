@@ -1,0 +1,151 @@
+<div class="pagina-perfil">
+
+  <!-- Cabecera de sección -->
+  <div class="seccion-cabecera">
+    <h1 class="titulo-pagina">👥 Gestión de perfiles</h1>
+    <p class="subtitulo">Selecciona tu perfil para organizar eventos grupales</p>
+  </div>
+
+  <!-- Perfil activo — *ngIf -->
+  <div class="panel-activo" *ngIf="perfilActivo; else sinSesion">
+    <div class="activo-info">
+      <span class="activo-avatar">{{ perfilActivo.avatar }}</span>
+      <div>
+        <p class="activo-nombre">{{ perfilActivo.nombre | titlecase }}</p>
+        <p class="activo-email">{{ perfilActivo.email }}</p>
+        <span class="badge-sesion">✅ Sesión activa</span>
+      </div>
+    </div>
+    <button class="btn-cerrar-sesion" (click)="cerrarSesion()">Cerrar sesión</button>
+  </div>
+
+  <!-- Sin sesión — ng-template con else -->
+  <ng-template #sinSesion>
+    <div class="panel-aviso">
+      ⚠️ No hay ningún perfil activo. Selecciona uno de la lista para empezar.
+    </div>
+  </ng-template>
+
+  <!-- Lista de perfiles — *ngFor con trackBy -->
+  <div class="lista-perfiles">
+    <h2 class="subtitulo-sec">Perfiles disponibles ({{ perfiles.length }})</h2>
+
+    <!-- Mensaje si no hay perfiles — *ngIf -->
+    <div class="sin-datos" *ngIf="perfiles.length === 0">
+      Aún no hay perfiles. Crea el primero 👇
+    </div>
+
+    <div class="grid-perfiles">
+      <div
+        class="tarjeta-perfil"
+        *ngFor="let perfil of perfiles; trackBy: trackByPerfil"
+        [ngClass]="{ 'es-activo': perfil.id === perfilActivo?.id }"
+      >
+        <div class="perfil-avatar">{{ perfil.avatar }}</div>
+        <div class="perfil-info">
+          <p class="perfil-nombre">{{ perfil.nombre | titlecase }}</p>
+          <p class="perfil-email">{{ perfil.email }}</p>
+          <!-- Pipe number para mostrar eventos -->
+          <p class="perfil-eventos">
+            📋 {{ totalEventos(perfil.id) | number }} evento{{ totalEventos(perfil.id) !== 1 ? 's' : '' }}
+          </p>
+        </div>
+        <div class="perfil-acciones">
+          <!-- *ngIf para mostrar/ocultar botón según si es el activo -->
+          <button
+            class="btn-activar"
+            *ngIf="perfil.id !== perfilActivo?.id"
+            (click)="activarPerfil(perfil.id)"
+          >
+            Usar este perfil
+          </button>
+          <span class="badge-activo" *ngIf="perfil.id === perfilActivo?.id">
+            Activo ✓
+          </span>
+          <button class="btn-eliminar-p" (click)="eliminarPerfil(perfil.id)">
+            🗑️
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón crear nuevo perfil -->
+  <div class="seccion-nuevo">
+    <button class="btn-toggle-form" (click)="mostrarFormNuevo = !mostrarFormNuevo">
+      {{ mostrarFormNuevo ? '✕ Cancelar' : '+ Crear nuevo perfil' }}
+    </button>
+
+    <!-- Formulario nuevo perfil — *ngIf -->
+    <div class="form-nuevo" *ngIf="mostrarFormNuevo">
+      <h3 class="form-titulo">Nuevo perfil</h3>
+
+      <form #formNuevo="ngForm" (ngSubmit)="alCrearPerfil(formNuevo)" novalidate>
+
+        <!-- Nombre -->
+        <div class="campo">
+          <label class="etiqueta">Nombre *</label>
+          <input
+            name="nombre"
+            type="text"
+            class="input"
+            [(ngModel)]="nuevoPerfilDatos.nombre"
+            #campoNombre="ngModel"
+            required
+            minlength="2"
+            placeholder="Ej: María López"
+            [class.error]="campoNombre.invalid && campoNombre.touched"
+          />
+          <div class="msg-error" *ngIf="campoNombre.invalid && campoNombre.touched">
+            <span *ngIf="campoNombre.errors?.['required']">Obligatorio</span>
+            <span *ngIf="campoNombre.errors?.['minlength']">Mínimo 2 caracteres</span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="campo">
+          <label class="etiqueta">Email *</label>
+          <input
+            name="email"
+            type="email"
+            class="input"
+            [(ngModel)]="nuevoPerfilDatos.email"
+            #campoEmail="ngModel"
+            required
+            email
+            placeholder="maria@email.com"
+            [class.error]="campoEmail.invalid && campoEmail.touched"
+          />
+          <div class="msg-error" *ngIf="campoEmail.invalid && campoEmail.touched">
+            <span *ngIf="campoEmail.errors?.['required']">Obligatorio</span>
+            <span *ngIf="campoEmail.errors?.['email']">Email no válido</span>
+          </div>
+        </div>
+
+        <!-- Avatar — *ngFor de opciones -->
+        <div class="campo">
+          <label class="etiqueta">Avatar</label>
+          <div class="selector-avatar">
+            <button
+              type="button"
+              *ngFor="let av of avatares"
+              class="btn-avatar"
+              [class.seleccionado]="nuevoPerfilDatos.avatar === av"
+              (click)="nuevoPerfilDatos.avatar = av"
+            >{{ av }}</button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="btn-crear"
+          [disabled]="formNuevo.invalid"
+        >
+          ✅ Crear perfil
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+</div>

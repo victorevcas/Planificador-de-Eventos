@@ -1,0 +1,45 @@
+<header class="cabecera">
+  <div class="cabecera-interior">
+
+    <!-- Logo -->
+    <a class="logo" routerLink="/calendario">
+      <span class="logo-icono">📅</span>
+      <span class="logo-texto">PlanificadorEventos</span>
+    </a>
+
+    <!-- Navegación principal — routerLink + routerLinkActive -->
+    <nav class="navegacion">
+      <a
+        routerLink="/calendario"
+        routerLinkActive="activo"
+        class="nav-enlace"
+      >
+        📅 Calendario
+      </a>
+      <a
+        routerLink="/eventos"
+        routerLinkActive="activo"
+        class="nav-enlace"
+      >
+        📋 Eventos
+      </a>
+      <a
+        routerLink="/perfil"
+        routerLinkActive="activo"
+        class="nav-enlace"
+      >
+        👤 Perfil
+      </a>
+    </nav>
+
+    <!-- Perfil activo — *ngIf condicional -->
+    <div class="perfil-activo" *ngIf="perfilActivo; else sinPerfil">
+      <span class="avatar">{{ perfilActivo.avatar }}</span>
+      <span class="nombre-perfil">{{ perfilActivo.nombre | titlecase }}</span>
+    </div>
+    <ng-template #sinPerfil>
+      <a routerLink="/perfil" class="btn-login">Seleccionar perfil</a>
+    </ng-template>
+
+  </div>
+</header>

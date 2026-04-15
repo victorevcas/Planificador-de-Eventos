@@ -1,0 +1,165 @@
+<div class="pagina-form">
+  <div class="tarjeta-form">
+
+    <div class="form-cabecera">
+      <h1 class="form-titulo">
+        {{ modoEdicion ? '✏️ Editar evento' : '➕ Nuevo evento' }}
+      </h1>
+      <p class="form-subtitulo" *ngIf="!perfilActivo">
+        ⚠️ No hay perfil activo. El evento se creará sin autor.
+      </p>
+      <p class="form-subtitulo autor" *ngIf="perfilActivo">
+        Creando como <strong>{{ perfilActivo.nombre | titlecase }}</strong> {{ perfilActivo.avatar }}
+      </p>
+    </div>
+
+    <!-- Formulario template-driven -->
+    <form #formulario="ngForm" (ngSubmit)="alEnviar(formulario)" novalidate>
+
+      <!-- ── Título ── -->
+      <div class="campo">
+        <label class="etiqueta" for="titulo">Título del evento *</label>
+        <input
+          id="titulo"
+          name="titulo"
+          type="text"
+          class="input"
+          [(ngModel)]="datos.titulo"
+          #campoTitulo="ngModel"
+          required
+          minlength="3"
+          maxlength="80"
+          placeholder="Ej: Reunión de equipo"
+          [class.error]="campoTitulo.invalid && campoTitulo.touched"
+        />
+        <!-- *ngIf para mensajes de error de validación -->
+        <div class="msg-error" *ngIf="campoTitulo.invalid && campoTitulo.touched">
+          <span *ngIf="campoTitulo.errors?.['required']">El título es obligatorio</span>
+          <span *ngIf="campoTitulo.errors?.['minlength']">Mínimo 3 caracteres</span>
+        </div>
+        <div class="contador" [class.limite]="(datos.titulo?.length || 0) > 70">
+          {{ datos.titulo?.length || 0 }}/80
+        </div>
+      </div>
+
+      <!-- ── Fecha ── -->
+      <div class="campo">
+        <label class="etiqueta" for="fecha">Fecha *</label>
+        <input
+          id="fecha"
+          name="fecha"
+          type="date"
+          class="input"
+          [(ngModel)]="datos.fecha"
+          #campoFecha="ngModel"
+          required
+          [class.error]="campoFecha.invalid && campoFecha.touched"
+        />
+        <div class="msg-error" *ngIf="campoFecha.invalid && campoFecha.touched">
+          La fecha es obligatoria
+        </div>
+      </div>
+
+      <!-- ── Horas ── -->
+      <div class="fila-horas">
+        <div class="campo">
+          <label class="etiqueta" for="horaInicio">Hora inicio *</label>
+          <input
+            id="horaInicio"
+            name="horaInicio"
+            type="time"
+            class="input"
+            [(ngModel)]="datos.horaInicio"
+            #campoHora="ngModel"
+            required
+            [class.error]="campoHora.invalid && campoHora.touched"
+          />
+          <div class="msg-error" *ngIf="campoHora.invalid && campoHora.touched">
+            Obligatorio
+          </div>
+        </div>
+
+        <div class="campo">
+          <label class="etiqueta" for="horaFin">Hora fin (opcional)</label>
+          <input
+            id="horaFin"
+            name="horaFin"
+            type="time"
+            class="input"
+            [(ngModel)]="datos.horaFin"
+            [class.error]="!horaFinValida()"
+          />
+          <div class="msg-error" *ngIf="!horaFinValida()">
+            Debe ser posterior a la hora de inicio
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Descripción ── -->
+      <div class="campo">
+        <label class="etiqueta" for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          class="input textarea"
+          [(ngModel)]="datos.descripcion"
+          rows="3"
+          maxlength="300"
+          placeholder="Añade detalles del evento..."
+        ></textarea>
+        <div class="contador">{{ datos.descripcion?.length || 0 }}/300</div>
+      </div>
+
+      <!-- ── Color — *ngFor sobre opcionesColor ── -->
+      <div class="campo">
+        <label class="etiqueta">Color del evento</label>
+        <div class="selector-color">
+          <button
+            type="button"
+            *ngFor="let color of opcionesColor"
+            class="btn-color"
+            [ngClass]="'fondo-' + color"
+            [class.seleccionado]="datos.color === color"
+            (click)="datos.color = color"
+            [title]="etiquetasColor[color]"
+          ></button>
+        </div>
+      </div>
+
+      <!-- ── Participantes — *ngFor sobre perfiles ── -->
+      <div class="campo" *ngIf="perfiles.length > 0">
+        <label class="etiqueta">Participantes</label>
+        <div class="lista-participantes">
+          <label
+            class="participante-item"
+            *ngFor="let perfil of perfiles; trackBy: trackByPerfil"
+            [class.incluido]="esParticipante(perfil.id)"
+          >
+            <input
+              type="checkbox"
+              [checked]="esParticipante(perfil.id)"
+              (change)="toggleParticipante(perfil.id)"
+            />
+            <span class="avatar-p">{{ perfil.avatar }}</span>
+            <span>{{ perfil.nombre | titlecase }}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ── Acciones ── -->
+      <div class="acciones">
+        <button type="button" class="btn-cancelar" (click)="alCancelar()">
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="btn-guardar"
+          [disabled]="formulario.invalid || !horaFinValida()"
+        >
+          {{ modoEdicion ? '💾 Guardar cambios' : '✅ Crear evento' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

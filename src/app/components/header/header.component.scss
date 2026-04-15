@@ -1,0 +1,87 @@
+.cabecera {
+  background: #1e293b;
+  color: #fff;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.cabecera-interior {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 32px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.logo-icono { font-size: 1.4rem; }
+
+.logo-texto {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.navegacion {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-enlace {
+  padding: 6px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { background: #334155; color: #fff; }
+
+  // routerLinkActive aplica esta clase automáticamente
+  &.activo {
+    background: #3b82f6;
+    color: #fff;
+  }
+}
+
+.perfil-activo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.avatar { font-size: 1.4rem; }
+
+.nombre-perfil {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.btn-login {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+
+  &:hover { border-color: #3b82f6; color: #fff; }
+}

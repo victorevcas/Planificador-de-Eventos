@@ -1,0 +1,115 @@
+<div class="contenedor-cal">
+
+  <!-- ── Bienvenida con perfil activo — *ngIf ── -->
+  <div class="bienvenida" *ngIf="perfilActivo; else sinPerfil">
+    <span class="bienvenida-avatar">{{ perfilActivo.avatar }}</span>
+    <div>
+      <p class="bienvenida-texto">
+        ¡Hola, <strong>{{ perfilActivo.nombre | titlecase }}</strong>! 👋
+      </p>
+      <p class="bienvenida-sub">
+        Tienes <strong>{{ totalEventosMes }}</strong>
+        evento{{ totalEventosMes !== 1 ? 's' : '' }} este mes
+        <span *ngIf="colorFiltro !== 'todos'"> (filtrado por color)</span>
+      </p>
+    </div>
+  </div>
+
+  <ng-template #sinPerfil>
+    <div class="bienvenida bienvenida-anonimo">
+      <span class="bienvenida-avatar">📅</span>
+      <div>
+        <p class="bienvenida-texto">Planificador de Eventos</p>
+        <p class="bienvenida-sub">
+          <a routerLink="/perfil">Selecciona un perfil</a> para personalizar tu experiencia
+        </p>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- ── Cabecera del calendario ── -->
+  <div class="cal-cabecera">
+    <div class="cal-nav">
+      <button class="btn-nav" (click)="mesAnterior()" title="Mes anterior">‹</button>
+      <h2 class="mes-titulo">{{ etiquetaMes | titlecase }}</h2>
+      <button class="btn-nav" (click)="mesSiguiente()" title="Mes siguiente">›</button>
+    </div>
+
+    <div class="cal-acciones">
+      <button class="btn-hoy" (click)="irHoy()">Hoy</button>
+      <a routerLink="/eventos/nuevo" class="btn-nuevo">+ Nuevo evento</a>
+    </div>
+  </div>
+
+  <!-- ── Filtro por color — *ngFor sobre opcionesColor ── -->
+  <div class="barra-filtro">
+    <span class="filtro-label">Filtrar:</span>
+    <button
+      *ngFor="let op of opcionesColor; trackBy: trackByColor"
+      class="btn-filtro"
+      [class.activo]="colorFiltro === op.valor"
+      [ngClass]="op.valor !== 'todos' ? 'filtro-' + op.valor : ''"
+      (click)="colorFiltro = op.valor"
+    >
+      {{ op.etiqueta }}
+    </button>
+
+    <!-- Contador de eventos del mes — pipe number -->
+    <span class="contador-mes">
+      {{ totalEventosMes | number }} evento{{ totalEventosMes !== 1 ? 's' : '' }} este mes
+    </span>
+  </div>
+
+  <!-- ── Cuadrícula ── -->
+  <div class="cal-grid">
+
+    <!-- Cabecera días semana -->
+    <div class="fila-semana-header">
+      <div class="celda-header" *ngFor="let dia of diasSemana">{{ dia }}</div>
+    </div>
+
+    <!-- Semanas — *ngFor con trackBy -->
+    <div class="fila-semana"
+         *ngFor="let semana of semanas; trackBy: trackBySemana">
+
+      <!-- Días — *ngFor + [ngClass] dinámico -->
+      <div
+        class="celda-dia"
+        *ngFor="let dia of semana; trackBy: trackByDia"
+        [ngClass]="{
+          'otro-mes':   !dia.esMesActual,
+          'es-hoy':      dia.esHoy,
+          'es-festivo':  dia.esFestivo
+        }"
+        (click)="alClickDia(dia)"
+        [title]="dia.nombreFestivo || ''"
+      >
+        <span class="num-dia">{{ dia.numero }}</span>
+        <span class="icono-festivo" *ngIf="dia.esFestivo">🎉</span>
+
+        <!-- Eventos con pipe eventosPorDia + filtroEventos encadenados -->
+        <div class="lista-eventos">
+          <div
+            class="chip-evento"
+            *ngFor="let ev of eventos | eventosPorDia: dia.fecha | filtroEventos: colorFiltro"
+            [ngClass]="'color-' + ev.color"
+            (click)="alClickEvento(ev, $event)"
+            [title]="ev.titulo"
+          >
+            <span class="chip-hora">{{ ev.horaInicio }}</span>
+            <span class="chip-titulo">{{ ev.titulo }}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Leyenda — *ngIf si hay festivos ── -->
+  <div class="leyenda" *ngIf="festivos.length > 0">
+    <span class="leyenda-item">🎉 Festivo nacional</span>
+    <span class="leyenda-item hoy-item">Hoy</span>
+    <span class="leyenda-item otro-item">Otro mes</span>
+  </div>
+
+</div>
