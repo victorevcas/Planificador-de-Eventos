@@ -1,59 +1,58 @@
-# PlanificadorEventos
+# 📅 Planificador de Eventos
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
+Aplicación de calendario tipo Google Calendar desarrollada con **Angular 21** (standalone components).
 
-## Development server
+## Capturas de pantalla
 
-To start a local development server, run:
+> Próximamente
+
+## Funcionalidades
+
+- 📅 Calendario mensual con navegación y festivos nacionales
+- 📋 Crear, editar y eliminar eventos con formulario validado
+- 🎨 Filtro de eventos por color y contador del mes
+- 👥 Sistema de perfiles con sesión activa y eventos grupales
+- 🔒 Route Guard en la página de perfil
+- 🌐 API de festivos integrada con HttpClient
+
+## Conceptos Angular cubiertos
+
+| Concepto | Dónde |
+|---|---|
+| `*ngFor` + `trackBy` | Calendario, perfiles, participantes |
+| `*ngIf` / `ng-template` | Mensajes condicionales, perfil activo |
+| `[ngClass]` | Estilos dinámicos de días y eventos |
+| `[(ngModel)]` | Formularios template-driven |
+| Validaciones + errores | EventForm, PerfilComponent |
+| Pipe `titlecase`, `uppercase`, `number` | Detalle, Header, Perfil |
+| Pipe personalizado `eventosPorDia` | Calendario |
+| Pipe personalizado `duracionEvento` | Detalle de evento |
+| Pipe personalizado `filtroEventos` | Barra de filtro |
+| Servicios + `BehaviorSubject` | EventosService, PerfilesService |
+| `HttpClient` GET | API de festivos nacionales |
+| Routing con lazy loading | app.routes.ts |
+| Rutas hijas (child routes) | /eventos/... |
+| Parámetro dinámico `:id` | /eventos/:id |
+| `routerLink` + `routerLinkActive` | Header |
+| Route Guard funcional | /perfil |
+| Navegación programática | Router.navigate() |
+| `ActivatedRoute` | Parámetros y queryParams |
+
+## Instalación
 
 ```bash
+git clone https://github.com/victorevcas/Planificador-de-Eventos.git
+cd Planificador-de-Eventos
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abrir en: `http://localhost:4200`
 
-## Code scaffolding
+## API externa
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Festivos nacionales: [date.nager.at](https://date.nager.at/api/v3/PublicHolidays/{año}/ES)
 
-```bash
-ng generate component component-name
-```
+## Autor
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Victor Reviejo Castro — Proyecto final Angular
