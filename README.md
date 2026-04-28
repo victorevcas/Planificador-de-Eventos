@@ -8,7 +8,7 @@ Aplicación de calendario tipo Google Calendar desarrollada con **Angular 21** (
 <img width="1233" height="659" alt="image" src="https://github.com/user-attachments/assets/3d7a8e7d-da52-4521-9968-c3fc2b6b1211" />
 
 
-> Próximamente
+
 
 ## Funcionalidades
 
