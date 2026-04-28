@@ -3,6 +3,10 @@
 Aplicación de calendario tipo Google Calendar desarrollada con **Angular 21** (standalone components).
 
 ## Capturas de pantalla
+<img width="1098" height="848" alt="image" src="https://github.com/user-attachments/assets/ea27eebe-a46e-4e4d-8ae3-1ca93146ea34" />
+<img width="1219" height="889" alt="image" src="https://github.com/user-attachments/assets/d8826f93-79e4-434e-b5b0-af7d00124bb8" />
+<img width="1233" height="659" alt="image" src="https://github.com/user-attachments/assets/3d7a8e7d-da52-4521-9968-c3fc2b6b1211" />
+
 
 > Próximamente
 
@@ -55,4 +59,4 @@ Festivos nacionales: [date.nager.at](https://date.nager.at/api/v3/PublicHolidays
 
 ## Autor
 
-Victor Reviejo Castro — Proyecto final Angular
+Victor Reviejo Castro — Proyecto final Angular - Planificador de eventos
